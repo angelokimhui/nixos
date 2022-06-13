@@ -21,7 +21,7 @@
        efi.canTouchEfiVariables = true;
      };
      kernelPackages = pkgs.linuxPackages_zen;
-     kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" ];
+     kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" "nohibernate" ];
      supportedFilesystems = [ "ntfs" "ext4" "f2fs" ];
    };
 
