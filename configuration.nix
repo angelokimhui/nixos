@@ -10,15 +10,20 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-   boot.loader.systemd-boot.enable = true;
-   boot.loader.efi.canTouchEfiVariables = true;
-   boot.kernelPackages = pkgs.linuxPackages_zen;
-   boot.kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" ];
-   boot.initrd.kernelModules = [ "amdgpu" ];
-   boot.supportedFilesystems = [ "ntfs" "ext4" ];
+  # Boot related entries
+  # Bootloader configuration (systemdboot)
+   boot = {
+     loader = {
+       systemd-boot.enable = true;
+       efi.canTouchEfiVariables = true;
+     };
+     kernelPackages = pkgs.linuxPackages_zen;
+     kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" ];
+     initrd.kernelModules = [ "amdgpu" ];
+     supportedFilesystems = [ "ntfs" "ext4" ];
+   };
 
-  # networking.hostName = "nixos"; # Define your hostname.
+   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
    networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -38,12 +43,12 @@
   #  useXkbConfig = true; # use xkbOptions in tty.
    };
 
-  # Enable the X11 windowing system.
-   services.xserver.enable = true;
-
-  # KDE
-   services.xserver.displayManager.sddm.enable = true;
-   services.xserver.desktopManager.plasma5.enable = true;
+  # Xserver and Display UI settings.
+   services.xserver = {
+     enable = true;
+     displayManager.sddm.enable = true;
+     desktopManager.plasma5.enable = true;
+  };
   
   # Docker
    virtualisation.docker.enable = true;
@@ -74,16 +79,13 @@
      extraGroups = [ "wheel" "networkmanager" "docker" ]; # Enable ‘sudo’ for the user.
      packages = with pkgs; [
        firefox
-  #     thunderbird
      ];
    };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # environment.systemPackages = with pkgs; [
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  # ];
+  # List packages installed in system profile.
+  environment.systemPackages = with pkgs; [
+    xorg.xhost
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -107,7 +109,7 @@
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
   # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
+  system.copySystemConfiguration = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -118,3 +120,4 @@
   system.stateVersion = "22.05"; # Did you read the comment?
 
 }
+
