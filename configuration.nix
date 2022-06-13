@@ -10,6 +10,9 @@
       ./hardware-configuration.nix
     ];
 
+  # Nix related entries
+   nix.autoOptimiseStore = true ;
+
   # Boot related entries
   # Bootloader configuration (systemdboot)
    boot = {
@@ -19,8 +22,7 @@
      };
      kernelPackages = pkgs.linuxPackages_zen;
      kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" ];
-     initrd.kernelModules = [ "amdgpu" ];
-     supportedFilesystems = [ "ntfs" "ext4" ];
+     supportedFilesystems = [ "ntfs" "ext4" "f2fs" ];
    };
 
    networking.hostName = "nixos"; # Define your hostname.
@@ -53,8 +55,9 @@
   # Docker
    virtualisation.docker.enable = true;
 
-  # Filesystem Options
-   fileSystems."/".options = [ "noatime" "nodiratime" ];  
+  # Flatpak
+   services.flatpak.enable = true;
+   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # Configure keymap in X11
    services.xserver.layout = "us";
@@ -77,9 +80,9 @@
    users.users.maru = {
      isNormalUser = true;
      extraGroups = [ "wheel" "networkmanager" "docker" ]; # Enable ‘sudo’ for the user.
-     packages = with pkgs; [
-       firefox
-     ];
+  #   packages = with pkgs; [
+  #     firefox
+  #   ];
    };
 
   # List packages installed in system profile.
