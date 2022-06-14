@@ -3,6 +3,7 @@ Custom NixOS configuration.
 
 
 Files : 
+
 readme.md                  --- For this page.
 
 configuration.nix          --- NixOS custom config for my minimal LXDE setup, will try to migrate hw specific parts to hardware-configuration.nix
