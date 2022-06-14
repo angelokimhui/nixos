@@ -17,6 +17,14 @@
   boot.kernelParams = [ "mitigations=off" "random.trust_cpu=on" "nowatchdog" "nohibernate" ];
   boot.supportedFilesystems = [ "f2fs" "ext4" "ntfs" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
+  
+  # Journal
+  services.journald.extraConfig = ''
+    SystemMaxUse=100M
+  '';
+
+  # tmp
+  boot.tmpOnTmpfs = true;
 
   networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -40,12 +48,12 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.lxqt.enable = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
-  # services.xserver.deviceSection = ''
-  #   Option "TearFree" "true"
-  # '';  
+  services.xserver.deviceSection = ''
+    Option "TearFree" "true"
+  '';  
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
